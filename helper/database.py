@@ -255,7 +255,8 @@ class Database:
         banned_users = self.col.find({'ban_status.is_banned': True})
         return banned_users
         
-digital_botz = Database(Config.DB_URL, Config.DB_NAME)
+# Initialize database instance
+db = Database(Config.DB_URL, Config.DB_NAME)
 
 # Rkn Developer 
 # Don't Remove Credit 😔
