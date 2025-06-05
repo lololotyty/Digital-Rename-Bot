@@ -91,12 +91,17 @@ class DigitalRenameBot(Client):
             with open(name) as a:
                 patt = Path(a.name)
                 plugin_name = patt.stem.replace(".py", "")
-                plugins_path = Path(f"plugins/{plugin_name}.py")
-                import_path = "plugins.{}".format(plugin_name)
-                spec = importlib.util.spec_from_file_location(import_path, plugins_path)
-                load = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(load)
-                sys.modules["plugins" + plugin_name] = load
+                try:
+                    # Try modern import method first
+                    import_path = f"plugins.{plugin_name}"
+                    spec = importlib.util.spec_from_file_location(import_path, f"plugins/{plugin_name}.py")
+                    load = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(load)
+                except AttributeError:
+                    # Fallback to older import method
+                    import_path = f"plugins.{plugin_name}"
+                    load = __import__(import_path, fromlist=[''])
+                sys.modules[f"plugins.{plugin_name}"] = load
                 print("Digital Botz Imported " + plugin_name)
                 
         print(f"{me.first_name} Iꜱ Sᴛᴀʀᴛᴇᴅ.....✨️")
