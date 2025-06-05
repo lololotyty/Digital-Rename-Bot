@@ -2,7 +2,10 @@ from pyrogram import Client, filters
 from pyrogram.types import Message
 from config import Config
 import os
-from helper.database import db
+from helper.database import Database
+
+# Initialize database
+db = Database(Config.DB_URL, Config.DB_NAME)
 
 @Client.on_message(filters.channel & filters.media & ~filters.photo)
 async def channel_media_handler(bot: Client, message: Message):
